@@ -1,0 +1,89 @@
+#Hello! I have created SQL Queries using a Dataset for Company Sales 
+
+
+-- Show only the customers from Brazil
+
+SELECT firstname, lastname, city, address, country
+FROM chinook.customers
+WHERE country = 'Brazil';
+
+
+-- Selct all invoices that associated with each sales agent
+
+SELECT * FROM chinook.employees
+WHERE title= "Sales Support Agent";
+
+
+-- What is the Invoice ID for all sales made per Sales Agent?
+
+SELECT inv.InvoiceId,
+
+emp.Lastname,
+
+emp.Firstname
+
+FROM Chinook.employees emp
+
+JOIN chinook.customers cust ON cust.SupportRepID = emp.Employeeid
+
+JOIN chinook.Invoices Inv ON Inv.CustomerId = cust.CustomerId;
+
+
+
+-- How many invoices were there in 2009?
+
+
+SELECT COUNT(*)
+FROM chinook.invoices
+WHERE InvoiceDate BETWEEN '2009-01-01' AND '2009-12-31';
+
+
+
+-- What is the total sales for 2009?
+
+
+SELECT SUM(Total) AS Total_sales
+FROM chinook.invoices
+WHERE InvoiceDate Between '2009-01-01' AND '2009-12-31';
+
+
+
+-- Provide the data that shows all tracks, and include all album name, media type and Genre.
+
+
+SELECT t.name AS 'Track Name', a.Title AS 'Album Title', m.Name AS 'Media Type', g.Name As 'Genre'
+
+FROM chinook.tracks t
+
+JOIN chinook.Albums a
+
+ON a.AlbumId = t.AlbumId
+
+JOIN chinook.Media_Types m
+
+ON m.MediaTypeID = t.MediaTypeID
+
+JOIN chinook.Genres g
+
+ON g.GenreID = t.GenreId;
+
+
+
+-- What are the Total Sales of Each Sales agent?
+
+
+SELECT emp.FirstName, emp.LastName,
+ROUND(SUM(Inv.Total), 2) as 'Total Sales'
+FROM chinook.Employees emp
+
+JOIN chinook.customers cust
+ON cust.SupportRepID = emp. EmployeeID
+
+JOIN chinook.Invoices Inv
+ON Inv.CustomerId = cust.CustomerId
+
+
+
+WHERE emp.Title = 'Sales Support Agent'
+
+Group BY emp.FirstName;
